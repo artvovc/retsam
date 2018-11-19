@@ -5,16 +5,19 @@ import scala.concurrent.{Await, Future}
 
 trait Bench {
 
-  def timeConsumedOfFuture[A](fn: => Future[A]) = {
+  def timeConsumedOfFuture[A](`type`: String = "undefined", fn: => Future[A]) = {
     val startTime = System.currentTimeMillis()
-    Await.result(fn, Duration.Inf)
-    System.currentTimeMillis() - startTime
+    val result = Await.result(fn, Duration.Inf)
+    println(s"For ${`type`} time elapsed: ${System.currentTimeMillis() - startTime}")
+    result
   }
 
-  def timeConsumed[A](fn: => A) = {
+  def timeConsumed[A](`type`: String = "undefined", fn: => A) = {
     val startTime = System.currentTimeMillis()
-    fn
+    val result = fn
     System.currentTimeMillis() - startTime
+    println(s"For ${`type`} time elapsed: ${System.currentTimeMillis() - startTime}")
+    result
   }
 
 }
