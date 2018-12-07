@@ -1,4 +1,4 @@
-package brokers.kafka
+package brokers.gcp
 
 import akka.kafka.ProducerSettings
 import akka.kafka.scaladsl.Producer
@@ -7,14 +7,12 @@ import brokers.common.{ActorInst, Bench, PidExtractor}
 import com.typesafe.config.ConfigFactory
 import formats.common.{LargeMessage, ShortMessage}
 import formats.json.Json
-import formats.plain.PlainText
-import formats.xml.Xml
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringSerializer
 
 import scala.io.StdIn._
 
-object KafkaPublisher extends App with ActorInst with Bench with PidExtractor {
+object PubSubPublisher extends App with ActorInst with Bench with PidExtractor {
 
   println(s"Process started with pid: $pid")
 
@@ -43,7 +41,7 @@ object KafkaPublisher extends App with ActorInst with Bench with PidExtractor {
     //  val mappedLargeXml = timeConsumed("mapping-large-xml", recordsLarge.map(it => new ProducerRecord("large_xml", it.uuid, Xml().serialize(it))))
 
     println("Start core process and count elapsed time")
-    //  timeConsumedOfFuture(s"kafka-producer-plaintext-short-$length", Source(mappedShortPlainText).runWith(Producer.plainSink(producerSettings)))
+    //    timeConsumedOfFuture(s"kafka-producer-plaintext-short-$length", Source(mappedShortPlainText).runWith(Producer.plainSink(producerSettings)))
     timeConsumedOfFuture(s"kafka-producer-json-short-$length", Source(mappedShortJson).runWith(Producer.plainSink(producerSettings)))
     //  timeConsumedOfFuture(s"kafka-producer-xml-short-$length", Source(mappedShortXml).runWith(Producer.plainSink(producerSettings)))
     //

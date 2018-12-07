@@ -18,26 +18,26 @@ object AmqpPublisher extends App with ActorInst with Bench with PidExtractor {
 
   println(s"Process started with pid: $pid")
 
+  println("Extract producer configs")
+  val config = ConfigFactory.load().getConfig("akka.amqp")
+  val host = config.getString("host")
+  val port = config.getInt("port")
+  val username = config.getString("user")
+  val password = config.getString("password")
+  val virtualHost = config.getString("virtualHost")
+  val exchange = config.getString("exchange")
+
+  println("Initialize producer configs")
+  val connection = AmqpDetailsConnectionProvider
+    .create(host, port)
+    .withCredentials(AmqpCredentials(username, password))
+    .withVirtualHost(virtualHost)
+
   var length = 0
 
   do {
     print("\nIntroduce length: ")
     length = readInt()
-
-    println("Extract producer configs")
-    val config = ConfigFactory.load().getConfig("akka.amqp")
-    val host = config.getString("host")
-    val port = config.getInt("port")
-    val username = config.getString("user")
-    val password = config.getString("password")
-    val virtualHost = config.getString("virtualHost")
-    val exchange = config.getString("exchange")
-
-    println("Initialize producer configs")
-    val connection = AmqpDetailsConnectionProvider
-      .create(host, port)
-      .withCredentials(AmqpCredentials(username, password))
-      .withVirtualHost(virtualHost)
 
     println("Generate messages")
     val recordsShort = ShortMessage(length)
