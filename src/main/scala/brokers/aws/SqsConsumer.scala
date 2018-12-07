@@ -31,28 +31,28 @@ object SqsConsumer extends App with ActorInst with Bench with PidExtractor {
     .build()
 
   println("Start consuming")
-//  SqsSource(s"${endpoint}plaintext-short").map { it =>
-//    timeConsumed("mapping-short-plaintext", PlainText().deserialize[ShortMessage](it.getBody))
-//  }.runWith(Sink.ignore)
-//
+  SqsSource(s"${endpoint}plaintext-short").map { it =>
+    timeConsumed("mapping-short-plaintext", PlainText().deserialize[ShortMessage](it.getBody))
+  }.runWith(Sink.ignore)
+
   SqsSource(s"${endpoint}plaintext-large").map { it =>
     timeConsumed("mapping-large-plaintext", PlainText().deserialize[LargeMessage](it.getBody))
   }.runWith(Sink.ignore)
-//
-//  SqsSource(s"${endpoint}json-short").map { it =>
-//    timeConsumed("mapping-short-json", Json().deserialize[ShortMessage](it.getBody))
-//  }.runWith(Sink.ignore)
-//
-//  SqsSource(s"${endpoint}json-large").map { it =>
-//    timeConsumed("mapping-large-json", Json().deserialize[LargeMessage](it.getBody))
-//  }.runWith(Sink.ignore)
-//
-//  SqsSource(s"${endpoint}xml-short").map { it =>
-//    timeConsumed("mapping-short-xml", Xml().deserialize[ShortMessage](it.getBody))
-//  }.runWith(Sink.ignore)
-//
-//  SqsSource(s"${endpoint}xml-large").map { it =>
-//    timeConsumed("mapping-large-xml", Xml().deserialize[LargeMessage](it.getBody))
-//  }.runWith(Sink.ignore)
+
+  SqsSource(s"${endpoint}json-short").map { it =>
+    timeConsumed("mapping-short-json", Json().deserialize[ShortMessage](it.getBody))
+  }.runWith(Sink.ignore)
+
+  SqsSource(s"${endpoint}json-large").map { it =>
+    timeConsumed("mapping-large-json", Json().deserialize[LargeMessage](it.getBody))
+  }.runWith(Sink.ignore)
+
+  SqsSource(s"${endpoint}xml-short").map { it =>
+    timeConsumed("mapping-short-xml", Xml().deserialize[ShortMessage](it.getBody))
+  }.runWith(Sink.ignore)
+
+  SqsSource(s"${endpoint}xml-large").map { it =>
+    timeConsumed("mapping-large-xml", Xml().deserialize[LargeMessage](it.getBody))
+  }.runWith(Sink.ignore)
 
 }

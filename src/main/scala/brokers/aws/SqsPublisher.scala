@@ -43,7 +43,7 @@ object SqsPublisher extends App with ActorInst with Bench with PidExtractor {
 
     println("Map messages to kafka record")
 //    val mappedMessages = timeConsumed("mapping-short-plaintext", recordsShort.map(it => new SendMessageRequest().withMessageBody(PlainText().serialize(it))))
-    val mappedMessages = timeConsumed("mapping-large-plaintext", recordsLarge.map(it => new SendMessageRequest().withMessageBody(PlainText().serialize(it))))
+//    val mappedMessages = timeConsumed("mapping-large-plaintext", recordsLarge.map(it => new SendMessageRequest().withMessageBody(PlainText().serialize(it))))
 //    val mappedMessages = timeConsumed("mapping-short-json", recordsShort.map(it => new SendMessageRequest().withMessageBody(Json().serialize(it))))
 //    val mappedMessages = timeConsumed("mapping-large-json", recordsLarge.map(it => new SendMessageRequest().withMessageBody(Json().serialize(it))))
 //    val mappedMessages = timeConsumed("mapping-short-xml", recordsShort.map(it => new SendMessageRequest().withMessageBody(Xml().serialize(it))))
@@ -51,7 +51,7 @@ object SqsPublisher extends App with ActorInst with Bench with PidExtractor {
 
     println("Start core process and count elapsed time")
 //    timeConsumedOfFuture(s"sqs-producer-plaintext-short-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink(s"${endpoint}plaintext-short")))
-    timeConsumedOfFuture(s"sqs-producer-plaintext-large-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink(s"${endpoint}plaintext-large")))
+//    timeConsumedOfFuture(s"sqs-producer-plaintext-large-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink(s"${endpoint}plaintext-large")))
 //    timeConsumedOfFuture(s"sqs-producer-json-short-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink(s"${endpoint}json-short")))
 //    timeConsumedOfFuture(s"sqs-producer-json-large-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink(s"${endpoint}json-large")))
 //    timeConsumedOfFuture(s"sqs-producer-xml-short-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink(s"${endpoint}xml-short")))

@@ -45,7 +45,7 @@ object AmqpPublisher extends App with ActorInst with Bench with PidExtractor {
 
     println("Map messages to kafka record")
 //    val source = timeConsumed("mapping-short-plaintext", Source(recordsShort).map(it => amqp.OutgoingMessage.create(ByteString(PlainText().serialize(it)), immediate = false, mandatory = false)))
-    val source = timeConsumed("mapping-long-plaintext", Source(recordsLarge).map(it => amqp.OutgoingMessage.create(ByteString(PlainText().serialize(it)), immediate = false, mandatory = false)))
+//    val source = timeConsumed("mapping-long-plaintext", Source(recordsLarge).map(it => amqp.OutgoingMessage.create(ByteString(PlainText().serialize(it)), immediate = false, mandatory = false)))
 //    val source = timeConsumed("mapping-short-json", Source(recordsShort).map(it => amqp.OutgoingMessage.create(ByteString(Json().serialize(it)), immediate = false, mandatory = false)))
 //    val source = timeConsumed("mapping-long-json", Source(recordsLarge).map(it => amqp.OutgoingMessage.create(ByteString(Json().serialize(it)), immediate = false, mandatory = false)))
 //    val source = timeConsumed("mapping-short-xml", Source(recordsShort).map(it => amqp.OutgoingMessage.create(ByteString(Xml().serialize(it)), immediate = false, mandatory = false)))
@@ -53,7 +53,7 @@ object AmqpPublisher extends App with ActorInst with Bench with PidExtractor {
 
     println("Start core process and count elapsed time")
 //    timeConsumedOfFuture(s"amqp-producer-plaintext-short-$length", source.runWith(AmqpSink(AmqpSinkSettings(connection).withExchange(s"$exchange-short-plaintext"))))
-    timeConsumedOfFuture(s"amqp-producer-plaintext-long-$length", source.runWith(AmqpSink(AmqpSinkSettings(connection).withExchange(s"$exchange-long-plaintext"))))
+//    timeConsumedOfFuture(s"amqp-producer-plaintext-long-$length", source.runWith(AmqpSink(AmqpSinkSettings(connection).withExchange(s"$exchange-long-plaintext"))))
 //    timeConsumedOfFuture(s"amqp-producer-json-short-$length", source.runWith(AmqpSink(AmqpSinkSettings(connection).withExchange(s"$exchange-short-json"))))
 //    timeConsumedOfFuture(s"amqp-producer-json-long-$length", source.runWith(AmqpSink(AmqpSinkSettings(connection).withExchange(s"$exchange-long-json"))))
 //    timeConsumedOfFuture(s"amqp-producer-xml-short-$length", source.runWith(AmqpSink(AmqpSinkSettings(connection).withExchange(s"$exchange-short-xml"))))
