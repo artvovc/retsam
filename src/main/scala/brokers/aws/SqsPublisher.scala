@@ -20,6 +20,7 @@ object SqsPublisher extends App with ActorInst with Bench with PidExtractor {
   val config = ConfigFactory.load().getConfig("akka.sqs")
   val accessKey = config.getString("access-key")
   val secretKey = config.getString("secret-key")
+  val endpoint = "https://sqs.eu-west-2.amazonaws.com/359756149454/"
 
   println("Initialize producer configs")
   val credentialsProvider = new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey))
@@ -49,12 +50,12 @@ object SqsPublisher extends App with ActorInst with Bench with PidExtractor {
 //    val mappedMessages = timeConsumed("mapping-large-xml", recordsLarge.map(it => new SendMessageRequest().withMessageBody(Xml().serialize(it))))
 
     println("Start core process and count elapsed time")
-//    timeConsumedOfFuture(s"sqs-producer-plaintext-short-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink("https://sqs.eu-west-2.amazonaws.com/359756149454/plaintext-short")))
-    timeConsumedOfFuture(s"sqs-producer-plaintext-large-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink("https://sqs.eu-west-2.amazonaws.com/359756149454/plaintest-large")))
-//    timeConsumedOfFuture(s"sqs-producer-json-short-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink("https://sqs.eu-west-2.amazonaws.com/359756149454/json-short")))
-//    timeConsumedOfFuture(s"sqs-producer-json-large-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink("https://sqs.eu-west-2.amazonaws.com/359756149454/json-large")))
-//    timeConsumedOfFuture(s"sqs-producer-xml-short-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink("https://sqs.eu-west-2.amazonaws.com/359756149454/xml-short")))
-//    timeConsumedOfFuture(s"sqs-producer-xml-large-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink("https://sqs.eu-west-2.amazonaws.com/359756149454/xml-large")))
+//    timeConsumedOfFuture(s"sqs-producer-plaintext-short-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink(s"${endpoint}plaintext-short")))
+    timeConsumedOfFuture(s"sqs-producer-plaintext-large-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink(s"${endpoint}plaintext-large")))
+//    timeConsumedOfFuture(s"sqs-producer-json-short-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink(s"${endpoint}json-short")))
+//    timeConsumedOfFuture(s"sqs-producer-json-large-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink(s"${endpoint}json-large")))
+//    timeConsumedOfFuture(s"sqs-producer-xml-short-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink(s"${endpoint}xml-short")))
+//    timeConsumedOfFuture(s"sqs-producer-xml-large-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink(s"${endpoint}xml-large")))
   } while (length > 0)
 
   println("Shout down materializer and actor")

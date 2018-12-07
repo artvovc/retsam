@@ -34,12 +34,12 @@ object AmqpConsumer extends App with ActorInst with Bench with PidExtractor {
 //    timeConsumed("mapping-short-plaintext", PlainText().deserialize[ShortMessage](it.message.bytes.utf8String))
 //    it.ack()
 //  }.runWith(Sink.ignore)
-
+//
   AmqpSource.committableSource(NamedQueueSourceSettings.create(connection, "master-queue-long-plaintext"), bufferSize).map { it =>
     timeConsumed("mapping-large-plaintext", PlainText().deserialize[LargeMessage](it.message.bytes.utf8String))
     it.ack()
   }.runWith(Sink.ignore)
-
+//
 //  AmqpSource.committableSource(NamedQueueSourceSettings.create(connection, "master-queue-short-json"), bufferSize).map { it =>
 //    timeConsumed("mapping-short-json", Json().deserialize[ShortMessage](it.message.bytes.utf8String))
 //    it.ack()

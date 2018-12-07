@@ -18,34 +18,8 @@ object PubSubConsumer extends App with ActorInst with Bench with PidExtractor {
   val config = ConfigFactory.load().getConfig("akka.kafka.consumer")
 
   println("Initialize consumer configs")
-  val consumerSettings = ConsumerSettings.apply(config, new StringDeserializer, new StringDeserializer)
-    .withBootstrapServers("localhost:9092")
-    .withGroupId("group")
-    .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
 
   println("Start consuming")
-//  Consumer.plainSource(consumerSettings, Subscriptions.topics("short_plaintext")).map(
-//    it => timeConsumed("mapping-short-plaintext", PlainText().deserialize[ShortMessage](it.value))
-//  ).runWith(Sink.ignore)
 
-  Consumer.plainSource(consumerSettings, Subscriptions.topics("short_json")).map(
-    it => timeConsumed("mapping-short-json", Json().deserialize[ShortMessage](it.value))
-  ).runWith(Sink.ignore)
-
-//  Consumer.plainSource(consumerSettings, Subscriptions.topics("short_xml")).map(
-//    it => timeConsumed("mapping-short-xml", Xml().deserialize[ShortMessage](it.value))
-//  ).runWith(Sink.ignore)
-//
-//  Consumer.plainSource(consumerSettings, Subscriptions.topics("large_plaintext")).map(
-//    it => timeConsumed("mapping-large-plaintext", PlainText().deserialize[ShortMessage](it.value))
-//  ).runWith(Sink.ignore)
-//
-//  Consumer.plainSource(consumerSettings, Subscriptions.topics("large_json")).map(
-//    it => timeConsumed("mapping-large-json", Json().deserialize[ShortMessage](it.value))
-//  ).runWith(Sink.ignore)
-//
-//  Consumer.plainSource(consumerSettings, Subscriptions.topics("large_xml")).map(
-//    it => timeConsumed("mapping-large-xml", Xml().deserialize[ShortMessage](it.value))
-//  ).runWith(Sink.ignore)
 
 }
