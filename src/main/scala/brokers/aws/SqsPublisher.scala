@@ -1,14 +1,14 @@
 package brokers.aws
 
-import akka.kafka.ProducerSettings
-import akka.kafka.scaladsl.Producer
+import akka.stream.alpakka.sqs.scaladsl.SqsPublishSink
 import akka.stream.scaladsl.Source
 import brokers.common.{ActorInst, Bench, PidExtractor}
+import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicAWSCredentials}
+import com.amazonaws.services.sqs.{AmazonSQSAsync, AmazonSQSAsyncClientBuilder}
+import com.amazonaws.services.sqs.model.SendMessageRequest
 import com.typesafe.config.ConfigFactory
 import formats.common.{LargeMessage, ShortMessage}
-import formats.json.Json
-import org.apache.kafka.clients.producer.ProducerRecord
-import org.apache.kafka.common.serialization.StringSerializer
+import formats.plain.PlainText
 
 import scala.io.StdIn._
 
@@ -17,9 +17,18 @@ object SqsPublisher extends App with ActorInst with Bench with PidExtractor {
   println(s"Process started with pid: $pid")
 
   println("Extract producer configs")
-  val config = ConfigFactory.load().getConfig("akka.kafka.producer")
+  val config = ConfigFactory.load().getConfig("akka.sqs")
+  val accessKey = config.getString("access-key")
+  val secretKey = config.getString("secret-key")
 
   println("Initialize producer configs")
+  val credentialsProvider = new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey))
+
+  implicit val awsSqsClient: AmazonSQSAsync = AmazonSQSAsyncClientBuilder
+    .standard()
+    .withCredentials(credentialsProvider)
+    .withRegion("eu-west-2")
+    .build()
 
   var length = 0
 
@@ -32,10 +41,20 @@ object SqsPublisher extends App with ActorInst with Bench with PidExtractor {
     val recordsLarge = LargeMessage(length)
 
     println("Map messages to kafka record")
-    //  val mappedShortPlainText = timeConsumed("mapping-short-plaintext", recordsShort.map(it => new ProducerRecord("short_plaintext", it.uuid, PlainText().serialize(it))))
+//    val mappedMessages = timeConsumed("mapping-short-plaintext", recordsShort.map(it => new SendMessageRequest().withMessageBody(PlainText().serialize(it))))
+    val mappedMessages = timeConsumed("mapping-large-plaintext", recordsLarge.map(it => new SendMessageRequest().withMessageBody(PlainText().serialize(it))))
+//    val mappedMessages = timeConsumed("mapping-short-json", recordsShort.map(it => new SendMessageRequest().withMessageBody(Json().serialize(it))))
+//    val mappedMessages = timeConsumed("mapping-large-json", recordsLarge.map(it => new SendMessageRequest().withMessageBody(Json().serialize(it))))
+//    val mappedMessages = timeConsumed("mapping-short-xml", recordsShort.map(it => new SendMessageRequest().withMessageBody(Xml().serialize(it))))
+//    val mappedMessages = timeConsumed("mapping-large-xml", recordsLarge.map(it => new SendMessageRequest().withMessageBody(Xml().serialize(it))))
 
     println("Start core process and count elapsed time")
-    //  timeConsumedOfFuture(s"kafka-producer-plaintext-short-$length", Source(mappedShortPlainText).runWith(Producer.plainSink(producerSettings)))
+//    timeConsumedOfFuture(s"sqs-producer-plaintext-short-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink("https://sqs.eu-west-2.amazonaws.com/359756149454/plaintext-short")))
+    timeConsumedOfFuture(s"sqs-producer-plaintext-large-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink("https://sqs.eu-west-2.amazonaws.com/359756149454/plaintest-large")))
+//    timeConsumedOfFuture(s"sqs-producer-json-short-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink("https://sqs.eu-west-2.amazonaws.com/359756149454/json-short")))
+//    timeConsumedOfFuture(s"sqs-producer-json-large-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink("https://sqs.eu-west-2.amazonaws.com/359756149454/json-large")))
+//    timeConsumedOfFuture(s"sqs-producer-xml-short-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink("https://sqs.eu-west-2.amazonaws.com/359756149454/xml-short")))
+//    timeConsumedOfFuture(s"sqs-producer-xml-large-$length", Source(mappedMessages).runWith(SqsPublishSink.messageSink("https://sqs.eu-west-2.amazonaws.com/359756149454/xml-large")))
   } while (length > 0)
 
   println("Shout down materializer and actor")

@@ -17,7 +17,7 @@ object PubSubPublisher extends App with ActorInst with Bench with PidExtractor {
   println(s"Process started with pid: $pid")
 
   println("Extract producer configs")
-  val config = ConfigFactory.load().getConfig("akka.kafka.producer")
+  val config = ConfigFactory.load().getConfig("akka.pubsub")
 
   println("Initialize producer configs")
   val producerSettings = ProducerSettings.apply(config, new StringSerializer, new StringSerializer).withBootstrapServers("localhost:9092")
